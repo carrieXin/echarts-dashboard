@@ -1,0 +1,57 @@
+/// 字体图标
+/// @name: fonts.scss
+/// @author: carrie
+/// @access: public
+/// @example: <i class="iconfont icon-add"></i>
+
+@font-face {
+    font-family: 'iconfont';
+    src: url('../../assets/fonts/iconfont.eot');
+    src: url('../../assets/fonts/iconfont.eot?#iefix') format('embedded-opentype'),
+        url('../../assets/fonts/iconfont.woff2') format('woff2'),
+        url('../../assets/fonts/iconfont.woff') format('woff'),
+        url('../../assets/fonts/iconfont.ttf') format('truetype'),
+        url('../../assets/fonts/iconfont.svg#iconfont') format('svg');
+  }
+  .iconfont {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .icon-circle-checked:before {
+    content: "\e618";
+  }
+  
+  .icon-qr-code:before {
+    content: "\e69a";
+  }
+  
+  .icon-add:before {
+    content: "\e615";
+  }
+  
+  .icon-export:before {
+    content: "\e601";
+  }
+  
+  .icon-checked:before {
+    content: "\e695";
+  }
+  
+  .icon-search:before {
+    content: "\e616";
+  }
+  
+  .icon-arrow-down:before {
+    content: "\e600";
+  }
+  
+  .icon-close:before {
+    content: "\e641";
+  }
+  
+  .icon-arrow-right:before {
+    content: "\e696";
+  }

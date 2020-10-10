@@ -10,7 +10,26 @@
       "prefix": "app",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "scss",
+          "spec": false
+        },
+        "@schematics/angular:class": {
+          "spec": false
+        },
+        "@schematics/angular:directive": {
+          "spec": false
+        },
+        "@schematics/angular:guard": {
+          "spec": false
+        },
+        "@schematics/angular:module": {
+          "spec": false
+        },
+        "@schematics/angular:pipe": {
+          "spec": false
+        },
+        "@schematics/angular:service": {
+          "spec": false
         }
       },
       "architect": {
@@ -27,9 +46,13 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/app/scss/main.scss"
             ],
-            "scripts": [],
+            "scripts": [
+              "./node_modules/echarts/dist/echarts.min.js",
+              "./node_modules/echarts/dist/extension/bmap.js"
+            ],
             "es5BrowserSupport": true
           },
           "configurations": {

@@ -1,0 +1,49 @@
+/// 常用的字体样式
+/// @name: text.scss
+/// @author: carrie
+/// @access: public
+/// @example: <span class="text-bold text-14 text-center"></span>
+
+@import "_variables";
+
+// 字体粗细
+@each $weight in bold, normal {
+  .text-#{$weight} {
+    font-weight: #{$weight} !important;
+  }
+}
+
+// 字体大小
+@each $size in 12, 14, 16, 18, 20, 22 {
+  .text-#{$size} {
+    font-size: #{$size}px !important;
+  }
+}
+
+// 字体对齐
+@each $align in left, center, right {
+  .text-#{$align} {
+    text-align: #{$align} !important;
+  }
+}
+
+// 字体换行
+@each $wrap in wrap, nowrap {
+  .text-#{$wrap} {
+    white-space: #{$wrap} !important;
+  }
+}
+
+// 字体颜色
+$colors: (
+  red: $color-red,
+  blue: $color-blue,
+  green: $color-green,
+  white: $color-white,
+  black: $color-black
+);
+@each $name, $color in $colors {
+  .text-#{$name} {
+    color: #{$color} !important;
+  }
+}

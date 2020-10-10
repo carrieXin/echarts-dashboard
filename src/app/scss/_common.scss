@@ -1,0 +1,28 @@
+/// 生成通用的基础样式  OOSCSS
+/// @author carrie;
+/// @example  mr-10 is equal to margin-right: 10px;
+
+// 生成常用的 padding、margin 值
+@each $align, $size in ("", 5), (top, 5), (right, 5), (bottom, 5), (left, 5) {
+  $i: 6;
+  $direction: str-slice($align, 1, 1);
+
+  @while $i > 0 {
+    @if $align== "" {
+      .p-#{$size*$i} {
+        padding: ($size * $i) + px !important;
+      }
+      .m-#{$size*$i} {
+        margin: ($size * $i) + px !important;
+      }
+    } @else {
+      .p#{$direction}-#{$size*$i} {
+        padding-#{$align}: ($size * $i) + px !important;
+      }
+      .m#{$direction}-#{$size*$i} {
+        margin-#{$align}: ($size * $i) + px !important;
+      }
+    }
+    $i: $i - 1;
+  }
+}
