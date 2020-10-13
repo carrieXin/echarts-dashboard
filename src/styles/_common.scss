@@ -1,6 +1,6 @@
 /// 生成通用的基础样式  OOSCSS
-/// @author carrie;
-/// @example  mr-10 is equal to margin-right: 10px;
+/// @author carrie
+/// @example  mr-10 is equal to margin-right: 10px
 
 // 生成常用的 padding、margin 值
 @each $align, $size in ("", 5), (top, 5), (right, 5), (bottom, 5), (left, 5) {

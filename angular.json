@@ -47,7 +47,7 @@
             ],
             "styles": [
               "src/styles.scss",
-              "src/app/scss/main.scss"
+              "src/styles/main.scss"
             ],
             "scripts": [
               "./node_modules/echarts/dist/echarts.min.js",

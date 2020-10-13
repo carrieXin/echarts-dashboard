@@ -1,7 +1,15 @@
 <!-- <app-header></app-header> -->
 <main>
     <div class="chart">
-        <div echarts [options]="option" (chartInit)="chartInit($event)">
-        </div>
+        <!-- <div echarts [options]="option" (chartInit)="chartInit($event)">
+        </div> -->
+        <p>
+            用户名：<input type="text">
+        </p>
+        <p>
+            密码：<input type="password">
+        </p>
+        <button (click)="submit()" [disabled]="loaderService.showLoader">submit</button>
+        <div *ngIf="loaderService.showLoader" class="loader"></div>
     </div>
 </main>

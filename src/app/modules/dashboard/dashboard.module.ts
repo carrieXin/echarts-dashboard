@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 // modules
 import { SharedModule } from '../../shared/shared.module';
 import { NgxEchartsModule } from "ngx-echarts";
-import { JoyrideModule } from 'ngx-joyride';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
@@ -15,8 +14,7 @@ import { DashboardComponent } from './dashboard.component';
     CommonModule,
     DashboardRoutingModule,
     SharedModule,
-    NgxEchartsModule,
-    JoyrideModule.forRoot()
+    NgxEchartsModule
   ]
 })
 export class DashboardModule { }

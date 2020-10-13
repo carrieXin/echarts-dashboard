@@ -6,7 +6,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 // ngx-echarts
 import { NgxEchartsModule } from 'ngx-echarts';
 
-import { ComponentsModule } from './components/components.module';
+// components
+import { HeaderComponent } from './components/header/header.component';
 
 // pipes
 import { GenderPipe } from './pipes/gender.pipe';
@@ -14,6 +15,10 @@ import { GenderPipe } from './pipes/gender.pipe';
 const bootstrapModal = [
   ModalModule,
   NgxEchartsModule
+];
+
+const components = [
+  HeaderComponent
 ];
 
 const pipes = [
@@ -24,12 +29,11 @@ const pipes = [
 @NgModule({
   imports: [
     CommonModule,
-    ComponentsModule,
     ...bootstrapModal
   ],
-  declarations: [...pipes],
+  declarations: [...components, ...pipes],
   exports: [
-    ComponentsModule,
+    ...components,
     ...bootstrapModal
   ]
 })

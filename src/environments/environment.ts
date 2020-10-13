@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  // service: 'https://www.easy-mock.com/mock/5cb00759fe00af06249e083e/sidefs-fe',
+  service: localStorage.__uatHost__ || 'https://fs-plt-api.sideai.com'
 };
 
 /*

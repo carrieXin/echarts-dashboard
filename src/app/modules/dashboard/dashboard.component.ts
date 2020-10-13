@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { JoyrideService } from 'ngx-joyride';
+import { HttpClient } from '@angular/common/http';
 
+import { LoaderService } from '../../services/loader.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -199,8 +200,9 @@ export class DashboardComponent implements OnInit {
 
   dynamicTitle = 'Title';
   constructor(
+    private http: HttpClient,
     private router: Router,
-    private joyrideService: JoyrideService
+    public loaderService: LoaderService
   ) { }
 
   ngOnInit() {
@@ -218,5 +220,25 @@ export class DashboardComponent implements OnInit {
       const flag = bmap.getZoom();
       console.log("当前放大级别: " + flag);
     });
+  }
+
+  public submit() {
+    const url = '/agent/auth/auth_by_verify_code';
+    const params = {
+      cellphone: '15920089431',
+      verify_code: '695125',
+      verify_id: 5,
+      expire_day: 5
+    };
+    this.http.post(url, params).subscribe(
+      res => {
+        console.log(res);
+
+      },
+      err => {
+        console.log(err);
+
+      }
+    );
   }
 }
