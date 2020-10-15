@@ -3,12 +3,17 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 import { LoaderService } from '../../services/loader.service';
+import { LocalStorageService } from '../../services/local-storage.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  public docs;
+  public datas = {
+    err: ''
+  };
   // 散点数据
   private data = [
     {
@@ -202,11 +207,12 @@ export class DashboardComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private router: Router,
-    public loaderService: LoaderService
+    public loaderService: LoaderService,
+    public localStorage: LocalStorageService,
   ) { }
 
   ngOnInit() {
-
+    this.getDoc();
   }
 
   public chartInit(event) {
@@ -222,22 +228,42 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  private getDoc() {
+    const apiKey = 'helpDocumentation';
+    this.http.post(apiKey, {}).subscribe(
+      res => {
+        console.log(res);
+        this.docs = res;
+        const token = {name: 'carrie'};
+        this.localStorage.setItem('auth-token', token, 1);
+      },
+      err => {
+        console.log(err);
+
+      }
+    );
+  }
+
   public submit() {
-    const url = '/agent/auth/auth_by_verify_code';
-    const params = {
+    const apiKey = 'authByCode';
+    const data = {
       cellphone: '15920089431',
       verify_code: '695125',
       verify_id: 5,
       expire_day: 5
     };
-    this.http.post(url, params).subscribe(
+    const re = this.localStorage.getItem('auth-token');
+    console.log(re);
+    console.log(typeof re);
+
+    this.http.post(apiKey, data).subscribe(
       res => {
         console.log(res);
 
       },
       err => {
         console.log(err);
-
+        this.datas.err = err;
       }
     );
   }

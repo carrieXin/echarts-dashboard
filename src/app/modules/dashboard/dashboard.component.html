@@ -11,5 +11,10 @@
         </p>
         <button (click)="submit()" [disabled]="loaderService.showLoader">submit</button>
         <div *ngIf="loaderService.showLoader" class="loader"></div>
+        <div *ngFor="let item of docs">
+            <p *ngFor="let doc of item.doc_list">{{ doc.doc_name }}</p>
+        </div>
+
+        <p style="color: red" *ngIf="datas.err">{{ datas.err }}</p>
     </div>
 </main>
