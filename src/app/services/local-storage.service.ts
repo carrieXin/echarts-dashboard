@@ -16,8 +16,8 @@ export class LocalStorageService {
    */
   private init() {
     const reg = new RegExp("_expires");
-    let source = this.source;
-    let list = Object.keys(source);
+    const source = this.source;
+    const list = Object.keys(source);
     if (list.length > 0) {
       list.map((key) => {
         if (!reg.test(key)) {
@@ -28,19 +28,20 @@ export class LocalStorageService {
           }
         }
         return key;
-      })
+      });
     }
   }
 
   /**
    * 添加存储对象, 可设置过期时间
-   * @param key { string } 键名
-   * @param value { any } 键值
-   * @param expired { number } 过期时间，单位为分钟
+   * @param key 键名
+   * @param value 键值
+   * @param expired 过期时间，单位为分钟
    */
-  public setItem(key, value, expired?) {
-    let source = this.source;
-    source[key] = typeof value === 'object' ? JSON.stringify(value) : value;
+  public setItem(key: string, value: any, expired?: number) {
+    const source = this.source;
+    // source[key] = typeof value === 'object' ? JSON.stringify(value) : value;
+    source[key] = JSON.stringify(value);
     if (expired) {
       source[`${key}_expires`] = Date.now() + 1000 * 60 * expired;
     }
@@ -49,9 +50,9 @@ export class LocalStorageService {
   /**
    * 获取存储对象
    * @description: 返回值之前判断是否存在过期时间，如果当前时间大于过期时间，则删除该项
-   * @param key { string } 键名
+   * @param key 键名
    */
-  public getItem(key) {
+  public getItem(key: string) {
     const source = this.source;
     const expired = source[`${key}_expires`] || Date.now() + 1;
     const now = Date.now();
@@ -65,9 +66,9 @@ export class LocalStorageService {
 
   /**
    * 删除对象
-   * @param key { string } 键名
+   * @param key 键名
    */
-  public removeItem(key) {
+  public removeItem(key: string) {
     const source = this.source;
     const value = source[key];
     delete source[key];

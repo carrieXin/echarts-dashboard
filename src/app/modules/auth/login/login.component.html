@@ -1,0 +1,9 @@
+ <section>
+  <p>
+    用户名：<input type="text">
+  </p>
+  <p>
+    密码：<input type="password">
+  </p>
+  <button (click)="submit()" [disabled]="loaderService.showLoader">submit</button>
+ </section>

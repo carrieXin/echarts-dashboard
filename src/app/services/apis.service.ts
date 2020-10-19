@@ -20,6 +20,7 @@ export class ApisService {
      */
     authByCode: '/agent/auth/auth_by_verify_code',
     helpDocumentation: '/visitor/documentation/index',
+    landingPageList: '/team/landing_page/list',
   };
 
   constructor() { }

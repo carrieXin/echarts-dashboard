@@ -17,31 +17,34 @@ import { environment } from '../../../environments/environment';
 // services
 import { LoaderService } from '../../services/loader.service';
 import { ApisService } from '../../services/apis.service';
+import { LocalStorageService } from '../../services/local-storage.service';
+
 @Injectable()
 export class DefaultInterceptor implements HttpInterceptor {
     private host: string = environment.service;
     constructor(
         private injector: Injector,
-        private router: Router
+        private router: Router,
+        private localService: LocalStorageService,
+        private apisService: ApisService,
+        private loaderService: LoaderService
     ) { }
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const apisService = this.injector.get(ApisService);
         // loading
-        const loaderService = this.injector.get(LoaderService);
-        loaderService.show();
+        this.loaderService.show();
 
         // 请求头配置
         let newHeaders = req.headers;
         // 不需要token的接口
         const withoutTokenApis = ['helpDocumentation'];
-        if (localStorage.getItem('authToken') !== null && !withoutTokenApis.includes(req.url)) {
-            const token = localStorage.getItem('authToken');
+        const token = this.localService.getItem('authToken');
+        if (token && !withoutTokenApis.includes(req.url)) {
             newHeaders = newHeaders.append('auth-token', token);
         }
 
         const clonedReq = req.clone({
             // 补全服务器地址
-            url: `${this.host}${apisService.apis[req.url]}`,
+            url: `${this.host}${this.apisService.apis[req.url]}`,
             // 设置token
             headers: newHeaders
         });
@@ -49,7 +52,7 @@ export class DefaultInterceptor implements HttpInterceptor {
             .pipe(
                 retry(2),
                 catchError((error: HttpErrorResponse) => this.serverErrorHandle(error)),
-                finalize(() => loaderService.hide()),
+                finalize(() => this.loaderService.hide()),
                 map((event: HttpEvent<any>) => {
                     if (event instanceof HttpResponse) {
                         // 有进度条的请求

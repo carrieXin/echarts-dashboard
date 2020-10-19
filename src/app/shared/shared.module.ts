@@ -7,7 +7,6 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { NgxEchartsModule } from 'ngx-echarts';
 
 // components
-import { HeaderComponent } from './components/header/header.component';
 
 // pipes
 import { GenderPipe } from './pipes/gender.pipe';
@@ -18,7 +17,6 @@ const bootstrapModal = [
 ];
 
 const components = [
-  HeaderComponent
 ];
 
 const pipes = [

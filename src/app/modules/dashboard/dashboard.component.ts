@@ -213,6 +213,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.getDoc();
+    this.getLandingPageList();
   }
 
   public chartInit(event) {
@@ -230,41 +231,31 @@ export class DashboardComponent implements OnInit {
 
   private getDoc() {
     const apiKey = 'helpDocumentation';
+    this.docs = this.localStorage.getItem('helpDoc');
+
+    // this.http.post(apiKey, {}).subscribe(
+    //   res => {
+    //     console.log(res);
+    //     this.docs = res;
+    //   },
+    //   err => {
+    //     console.log(err);
+
+    //   }
+    // );
+  }
+
+  private getLandingPageList() {
+    const apiKey = 'landingPageList';
     this.http.post(apiKey, {}).subscribe(
       res => {
         console.log(res);
-        this.docs = res;
-        const token = {name: 'carrie'};
-        this.localStorage.setItem('auth-token', token, 1);
       },
       err => {
         console.log(err);
-
       }
     );
   }
 
-  public submit() {
-    const apiKey = 'authByCode';
-    const data = {
-      cellphone: '15920089431',
-      verify_code: '695125',
-      verify_id: 5,
-      expire_day: 5
-    };
-    const re = this.localStorage.getItem('auth-token');
-    console.log(re);
-    console.log(typeof re);
 
-    this.http.post(apiKey, data).subscribe(
-      res => {
-        console.log(res);
-
-      },
-      err => {
-        console.log(err);
-        this.datas.err = err;
-      }
-    );
-  }
 }
