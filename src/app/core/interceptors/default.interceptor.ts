@@ -36,9 +36,8 @@ export class DefaultInterceptor implements HttpInterceptor {
         // 请求头配置
         let newHeaders = req.headers;
         // 不需要token的接口
-        const withoutTokenApis = ['helpDocumentation'];
         const token = this.localService.getItem('authToken');
-        if (token && !withoutTokenApis.includes(req.url)) {
+        if (token) {
             newHeaders = newHeaders.append('auth-token', token);
         }
 
@@ -57,9 +56,8 @@ export class DefaultInterceptor implements HttpInterceptor {
                     if (event instanceof HttpResponse) {
                         // 有进度条的请求
                         if (req.reportProgress) {
-                            this.getEventMessage(event);
+                            this.getEventProgress(event);
                         }
-
                         // 客户端请求错误处理
                         const errCode = event.body.error_code;
                         if (errCode !== 0) {
@@ -76,7 +74,7 @@ export class DefaultInterceptor implements HttpInterceptor {
     /**
      * 文件上传进度条
      */
-    private getEventMessage(event: HttpEvent<any>) {
+    private getEventProgress(event: HttpEvent<any>) {
         const res = event['body']['data'];
         switch (event.type) {
             case HttpEventType.Sent:
@@ -145,6 +143,7 @@ export class DefaultInterceptor implements HttpInterceptor {
             2103: '鉴权凭证过期',
         };
         errMsg = errorList[errCode];
+        // 在请求错误中返回一条msg
         throw(errMsg);
     }
 }

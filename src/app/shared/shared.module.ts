@@ -6,10 +6,9 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 // ngx-echarts
 import { NgxEchartsModule } from 'ngx-echarts';
 
-// components
-
 // pipes
 import { GenderPipe } from './pipes/gender.pipe';
+import { ConvertUnitPipe } from './pipes/convert-unit.pipe';
 
 const bootstrapModal = [
   ModalModule,
@@ -20,7 +19,8 @@ const components = [
 ];
 
 const pipes = [
-  GenderPipe
+  GenderPipe,
+  ConvertUnitPipe
 ];
 
 
@@ -32,7 +32,8 @@ const pipes = [
   declarations: [...components, ...pipes],
   exports: [
     ...components,
-    ...bootstrapModal
+    ...bootstrapModal,
+    ...pipes
   ]
 })
 export class SharedModule { }

@@ -3,21 +3,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from "@angular/common/http";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
+import { CountUpModule } from 'countup.js-angular2';
 // components
+import { DashboardComponent } from './modules/dashboard/dashboard.component';
 
 // modules
+import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { LayoutModule } from './layout/layout.module';
 
-// interceptor
-import { httpInterceptorProviders } from './core/interceptors';
-
-// guards
-import { AuthGuard } from './core/guards/auth.guard';
-
 const components = [
   AppComponent,
+  DashboardComponent
 ];
 
 @NgModule({
@@ -29,9 +26,11 @@ const components = [
     HttpClientModule,
     AppRoutingModule,
     SharedModule,
-    LayoutModule
+    LayoutModule,
+    CoreModule,
+    CountUpModule
   ],
-  providers: [httpInterceptorProviders, AuthGuard],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

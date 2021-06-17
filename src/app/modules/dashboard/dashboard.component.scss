@@ -1,36 +1,515 @@
-main {
+/**
+ * 数据大屏整体布局
+ * ***************************************************************
+ * ***************************************************************
+ */
+$title-color: #629cd6;
+$content-color: #24a0d4;
+.dashboard-main {
+  height: 100vh;
+  background: #080b34;
+}
+.header {
+  height: 40px;
+  background: url("../../../assets/images/dashboard-header.png") 0 0 / 100% 100% no-repeat;
+  overflow: hidden;
+}
+/* 头部标题 */
+.header-title {
+  line-height: 40px;
+  text-align: center;
+  font-size: 21px;
+  font-weight: bold;
+  color: #62c3ec;
+  margin: 0;
+}
+/* 容器 */
+.container-box {
   display: flex;
-  justify-content: center;
-  margin-top: 50px;
+  overflow: hidden;
+  height: calc(100% - 55px);
+  padding: 0 15px 15px 15px;
+}
+/* 左中右三个模块 */
+.content-left,
+.content-right {
+  display: grid;
+  height: 100%;
+  width: 25%;
+  min-width: 330px;
+  min-height: 874px;
+}
+.content-middle {
+  height: 100%;
+  width: 50%;
+  min-width: 550px;
+  padding: 0 50px;
+}
+
+/**
+  * 公共样式
+  * ***************************************************************
+  * ***************************************************************
+  */
+.flex-row-between {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+progress {
+  color: orange;
+  border: none;
+  background: #d7d7d7;
+}
+
+progress::-webkit-progress-bar {
+  background: #d7d7d7;
+}
+
+progress::-webkit-progress-value {
+  background: #63c6e9 !important;
+}
+
+/* 六个小框的公共样式 */
+.common-block {
+  padding: 8px 0 13px 10px;
+  border: 1px solid #434e95;
+
+  // 四个小角角
+  background: linear-gradient(to left, #b5c4ff, #b5c4ff) left top no-repeat,
+    linear-gradient(to bottom, #b5c4ff, #b5c4ff) left top no-repeat,
+    linear-gradient(to left, #b5c4ff, #b5c4ff) right top no-repeat,
+    linear-gradient(to bottom, #b5c4ff, #b5c4ff) right top no-repeat,
+    linear-gradient(to left, #b5c4ff, #b5c4ff) left bottom no-repeat,
+    linear-gradient(to bottom, #b5c4ff, #b5c4ff) left bottom no-repeat,
+    linear-gradient(to left, #b5c4ff, #b5c4ff) right bottom no-repeat,
+    linear-gradient(to left, #b5c4ff, #b5c4ff) right bottom no-repeat;
+  background-size: 2px 10px, 10px 2px, 2px 10px, 10px 2px;
+
+  h2 {
+    color: $title-color;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 13px;
+    span {
+      font-size: 12px;
+      margin-left: 10px;
+    }
+  }
+}
+.common-title {
+  color: $title-color;
+  font-size: 16px;
+  font-weight: bold;
+  span {
+    font-size: 12px;
+    margin-left: 10px;
+  }
+}
+
+/* 概览数据公共样式 */
+.common-overview {
+  p {
+    margin-bottom: 7px;
+    font-size: 14px;
+    color: $title-color;
+    white-space: nowrap;
+  }
+  span {
+    font-weight: bold;
+    font-size: 20px;
+    color: $content-color;
+    margin-top: 8px;
+    white-space: nowrap;
+  }
+}
+/* 图表公共样式 */
+.chart-wrapper {
   position: relative;
-}
-.chart {
-  height: 800px;
-  width: 60%;
-  div{
-    height: 50%;
+  height: 80%;
+  .chart-div {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 }
 
-// 隐藏百度地图中的logo
-.anchorBL {
-  display: none;
+/* 表格公共样式 */
+.common-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  background: #080b34;
+  thead th {
+    color: $title-color;
+    white-space: nowrap;
+  }
+  tbody tr td {
+    border: none;
+    padding: 4px 0;
+    color: $content-color;
+    //  @include text-ellipsis;
+  }
+  tbody:after {
+    height: 0;
+  }
 }
 
-.loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
-  border-radius: 50px;
-  width: 100px;
-  height: 100px;
-  animation: spin 2s linear infinite;
+/* 列表排行的小圆圈 */
+.rank-circle {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  background: #434e95;
+  border-radius: 50%;
+  font-style: normal;
+}
+.gold-circle {
+  color: #f8b173;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
+/**
+  * 左侧三栏
+  * ***************************************************************
+  * ***************************************************************
+  */
+/* 团队排行 */
+.team-rank-box {
+  margin-bottom: 22px;
+  // height: 35%;
+  padding-left: 0;
+  h2 {
+    padding-left: 10px;
   }
-  100% {
-    transform: rotate(360deg);
+  .common-table {
+    tbody {
+      tr {
+        td:first-child {
+          padding-left: 14px;
+        }
+      }
+    }
+    tr:hover {
+      background: #161944;
+    }
   }
+}
+
+/* 实时订单 */
+.orders-box {
+  border: 1px solid #434e95;
+  padding: 8px 0 13px 0px;
+  margin-bottom: 22px;
+  h2 {
+    padding-left: 10px;
+    margin-bottom: 13px;
+    color: $title-color;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .common-table {
+    border-collapse: collapse;
+    text-align: left;
+    margin-bottom: 10px;
+    tbody tr:nth-child(odd) {
+      background: #161944;
+    }
+    td {
+      color: $content-color;
+      padding: 4px 0 4px 20px;
+    }
+  }
+  .order-info {
+    width: 60%;
+    text-align: right;
+    p {
+      padding-right: 20px;
+    }
+  }
+}
+
+/* 客流情况 */
+.flow-box {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 10px;
+  ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-right: 50px;
+  }
+}
+
+/**
+  * 中间栏
+  * ***************************************************************
+  * ***************************************************************
+  */
+/* 销售建档情况 */
+.lead-box {
+  position: relative;
+  height: 60%;
+  .chart-wrapper {
+    height: 90%;
+    margin-top: 20px;
+  }
+}
+.sale-overview {
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  margin-top: 35px;
+  padding-left: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  white-space: nowrap;
+  li {
+    width: 33%;
+    background: #192658;
+    padding: 15px 40px 10px 20px;
+    opacity: 0.8;
+    &:not(:first-child) {
+      margin-left: 30px;
+    }
+    p {
+      margin-bottom: 7px;
+      font-size: 14px;
+      color: $title-color;
+    }
+    span {
+      color: #f5b766;
+      font-size: 30px;
+      font-weight: bold;
+    }
+  }
+}
+
+/* 蓄客分析 */
+.reserve-box {
+  height: 40%;
+}
+.reserve-overview {
+  margin-top: 21px;
+}
+
+/**
+  * 右侧三栏
+  * ***************************************************************
+  * ***************************************************************
+  */
+/* 团队目标 */
+.target-box {
+  // height: 37.5%;
+  margin-bottom: 22px;
+  .common-table {
+    margin-top: 18px;
+    thead {
+      background: #161944;
+      height: 23px;
+      line-height: 23px;
+    }
+  }
+
+  .flex-row-between {
+    margin-right: 30px;
+    .progress-box {
+      width: 30%;
+    }
+  }
+  .progress {
+    background-color: #303251;
+  }
+  // 综合完成率背景
+  .bg-comprehensive {
+    background: #b6d0fe;
+  }
+  .bg-comprehensive-expected {
+    background: #e0e8f6;
+  }
+
+  // 销售额完成率背景
+  .bg-sale {
+    background: rgba(254, 232, 182, 1);
+  }
+  .bg-sale-expected {
+    background: #f7efdd;
+  }
+
+  // 建档完成率
+  .bg-profile {
+    background: #bfb6fe;
+  }
+  .bg-profile-expected {
+    background: #e6e4f5;
+  }
+
+  // 跟进完成率
+  .bg-follow {
+    background: #fec5b6;
+  }
+  .bg-follow-expected {
+    background: #f6e5e0;
+  }
+}
+
+/* 转化情况 */
+.convert-box {
+  margin-bottom: 22px;
+}
+
+// 进度条展示转化率
+.convert-rate-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 8px;
+  .progress-block {
+    width: 80%;
+    margin-right: 8px;
+    div {
+      margin-bottom: 15px;
+      p {
+        margin-bottom: 10px;
+      }
+    }
+  }
+  // 客户转化率箭头
+  .context-arrow {
+    height: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    label,
+    span {
+      color: #629cd6;
+      font-family: "PingFang SC";
+      font-size: 14px;
+      font-weight: bold;
+    }
+    span {
+      width: 167px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    i {
+      width: 27px;
+      height: 26px;
+      position: relative;
+      display: inline-block;
+      margin-right: 5px;
+      border-left: 2px solid #24a0d4;
+      border-bottom: 2px solid #24a0d4;
+      transform: translateY(-20%);
+      // 小正方形
+      &::before {
+        content: "";
+        width: 0;
+        height: 0;
+        position: absolute;
+        border: 4px solid #24a0d4;
+        bottom: -5px;
+        right: 22px;
+      }
+      // 箭头
+      &::after {
+        content: "";
+        width: 0;
+        height: 0;
+        position: absolute;
+        border-top: 6px solid transparent;
+        border-bottom: 6px solid transparent;
+        border-left: 6px solid #24a0d4;
+        bottom: -7px;
+        right: -2px;
+      }
+    }
+  }
+  // 综合转化率箭头
+  .arrow-line {
+    position: relative;
+    writing-mode: vertical-lr;
+    width: 34px;
+    height: 220px;
+    top: 5px;
+    border-top: 2px solid #24a0d4;
+    border-right: 2px solid #24a0d4;
+    border-bottom: 2px solid #24a0d4;
+    &::after {
+      content: "";
+      width: 0;
+      height: 0;
+      position: absolute;
+      bottom: -11px;
+      left: -1px;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-right: 10px solid #24a0d4;
+      border-radius: 4px;
+    }
+    // 竖排文字
+    span {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: -33px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #629cd6;
+      white-space: nowrap;
+      margin-right: 5px;
+    }
+  }
+}
+// 自定义转化率进度条颜色样式custom-potential-color、custom-interest-color、......
+$map: (
+  potential: #8ad5e5,
+  interest: #63c6e9,
+  intention: #69a3ee,
+  done: #8e8efb,
+);
+@each $key, $value in $map {
+  .custom-#{$key}-color {
+    /deep/ .progress {
+      height: 24px;
+      background-color: #303251;
+    }
+    /deep/ .progress-bar {
+      position: relative;
+      border-radius: 0 5px 5px 0;
+      background-color: $value;
+      span {
+        position: absolute;
+        color: #333333;
+        font-size: 14px;
+        // 默认文字居左
+        left: 12px;
+      }
+    }
+  }
+}
+
+/* 流失情况 */
+.loss-box {
+  .flex-row-between {
+    justify-content: flex-start;
+  }
+  label {
+    color: #5afc60;
+    font-size: 12px;
+    margin-left: 10px;
+  }
+}
+.loss-lead-total {
+  margin-right: 50px;
 }

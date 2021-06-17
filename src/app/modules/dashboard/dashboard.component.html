@@ -1,14 +1,313 @@
-<!-- <app-header></app-header> -->
-<main>
-    <div class="chart">
-        <!-- <div echarts [options]="option" (chartInit)="chartInit($event)">
-        </div> -->
-        hahahhah
-        <div *ngIf="loaderService.showLoader" class="loader"></div>
-        <div *ngFor="let item of docs">
-            <p *ngFor="let doc of item.doc_list">{{ doc.doc_name }}</p>
-        </div>
+<main class="dashboard-main">
+    <header class="header">
+        <h3 class="header-title">追踪销售数据中心</h3>
+    </header>
+    <section class="container-box">
+        <section class="content-left">
+            <!-- 团队排名 -->
+            <div class="common-block team-rank-box">
+                <h2>
+                    综合排行
+                    <span>{{ list.team_evaluation_list.date_from.date_range_label }}</span>
+                </h2>
+                <table class="common-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>团队</th>
+                            <th>建档人数</th>
+                            <th>跟进次数</th>
+                            <th>销售额</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let item of list.team_evaluation_list.list; let i = index">
+                            <tr *ngIf="i < datas.teamShowNum">
+                                <td>
+                                    <!-- 圆圈数字 -->
+                                    <i class="rank-circle" [ngClass]="{'gold-circle': i < 3}">{{ i + 1 }}</i>
+                                </td>
+                                <td>
+                                    <div class="over-ellipsis-box" style="max-width: 26em;padding-right: 5px;">
+                                        <p title="{{ item.child_team_name }}">{{ item.child_team_name }}</p>
+                                    </div>
+                                </td>
+                                <td>{{ item.lead_create_count }}</td>
+                                <td>{{ item.follow_up_action_count }}</td>
+                                <td>{{ item.transaction_volume |convertUnit }}w</td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
 
-        <p style="color: red" *ngIf="datas.err">{{ datas.err }}</p>
-    </div>
+            <!-- 实时订单 -->
+            <div class="common-block orders-box">
+                <h2>实时成交</h2>
+                <table class="common-table">
+                    <tbody>
+                        <ng-container *ngFor="let item of this.orderList; let i = index">
+                            <tr *ngIf="i < datas.orderShowNum">
+                                <td style="width: 55%;">
+                                    <div class="over-ellipsis-box" style="max-width: 26em;">
+                                        <p title="{{ item.child_team_name }}">{{ item?.child_team_name }}({{
+                                            item.agent_work_name }})</p>
+                                        <p title="{{ item.transaction_memo }}">{{ item.transaction_memo || '无'}}</p>
+                                    </div>
+                                </td>
+                                <td class="order-info">
+                                    <p>{{ item.transaction_dt }}</p>
+                                    <p>{{ item.paid_price |number:'1.0-2' }}元</p>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 客流情况 -->
+            <div class="common-block flow-box">
+                <h2>
+                    客流统计
+                    <span>{{ list.lead_traffic.date_from.date_range_label }}</span>
+                </h2>
+                <ul class="common-overview">
+                    <li>
+                        <p>客流人数</p>
+                        <p>
+                            <span>{{ list.lead_traffic.stats.total_traffic }}</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p>停留{{ list.lead_traffic.stats.traffic_significant_time }}分钟以上
+                        </p>
+                        <p>
+                            <span>{{ list.lead_traffic.stats.significant_visitor }}</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p>平均停留时间</p>
+                        <p>
+                            <span>{{ (list.lead_traffic.stats.avg_duration/60) |number:'1.0-2' }}分钟</span>
+                        </p>
+                    </li>
+                </ul>
+                <h2 class="m-top-10">客流走势</h2>
+                <div class="chart-wrapper">
+                    <div class="chart-div" echarts [options]="flowChartOption" (chartInit)="flowChartInit($event)">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="content-middle">
+            <!-- 区域数据 -->
+            <div class="lead-box">
+                <h2 class="common-title">
+                    区域数据
+                    <span>{{ list.team_evaluation.date_from.date_range_label }}</span>
+                </h2>
+                <ul class="flex-row-between sale-overview">
+                    <li>
+                        <p>建档人数</p>
+                        <span [countUp]="list.team_evaluation.stats.lead_create_count">0</span>
+                        <span class="text-15 m-left-10">人</span>
+                    </li>
+                    <li>
+                        <p>跟进次数</p>
+                        <span [countUp]="list.team_evaluation.stats.follow_up_action_count">0</span>
+                        <span class="text-15 m-left-10">次</span>
+                    </li>
+                    <li>
+                        <p>销售额</p>
+                        <span [countUp]="list.team_evaluation.stats.transaction_volume">0</span>
+                        <span class="text-15 m-left-10">元</span>
+                    </li>
+                </ul>
+
+                <!-- 中国地图 -->
+                <div class="chart-wrapper">
+                    <div class="chart-div" echarts [options]="chinaMapOption" (chartInit)="chinaMapInit($event)"
+                        [autoResize]="true"></div>
+                </div>
+
+            </div>
+
+            <!-- 客户储备 -->
+            <div class="reserve-box m-top-10">
+                <h2 class="common-title">
+                    客户储备
+                    <span>{{ list.lead_stage_stats?.active_offset }}天活跃客户</span>
+                </h2>
+                <!-- 柱状堆叠图 -->
+                <div class="chart-wrapper">
+                    <div class="chart-div" echarts [options]="reserveChartOption"
+                        (chartInit)="reserveChartInit($event)"></div>
+                </div>
+            </div>
+        </section>
+        <section class="content-right">
+            <!-- 销售目标 -->
+            <div class="common-block target-box">
+                <h2>销售目标
+                    <span>{{ list.team_goal_stats.date_from.date_range_label }}</span>
+                </h2>
+                <ul class="flex-row-between common-overview">
+                    <li>
+                        <p>建档总目标</p>
+                        <span>{{ list.team_goal_stats.stats.lead_create_count }}/{{
+                            list.team_goal_stats.stats.lead_create_goal }}人</span>
+                    </li>
+                    <li>
+                        <p>跟进总目标</p>
+                        <span>{{ list.team_goal_stats.stats.note_add_count }}/{{
+                            list.team_goal_stats.stats.note_add_goal }}次</span>
+                    </li>
+                    <li>
+                        <p>销售额总目标</p>
+                        <span>{{ list.team_goal_stats.stats.deal_value_total |convertUnit }}/{{
+                            list.team_goal_stats.stats.deal_value_goal |convertUnit }}w</span>
+                    </li>
+                </ul>
+                <!-- 进度条 -->
+                <div class="progress-box m-top-10 m-right-30">
+                    <p>
+                        综合完成率
+                        <label>{{ list.team_goal_stats.stats.comprehensive_rate || 0 }}%</label>
+                    </p>
+                    <div class="progress">
+                        <div class="progress-bar bg-comprehensive"
+                            [ngStyle]="{'width.%': list.team_goal_stats.stats.comprehensive_rate || 0}">
+                        </div>
+                    </div>
+                </div>
+
+                <table class="common-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>团队完成度</th>
+                            <th>综合</th>
+                            <th>建档</th>
+                            <th>跟进</th>
+                            <th>成交</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let item of list.team_goal_stats.team_stats; let i = index">
+                            <tr *ngIf="i < datas.goalShowNum">
+                                <td>
+                                    <!-- 皇冠数字 -->
+                                    <p class="rank-crown m-right-5">
+                                        <i class="rank-circle">{{ i + 1}}</i>
+                                    </p>
+                                </td>
+                                <td>
+                                    <div class="over-ellipsis-box" style="max-width: 26em;padding-right: 5px;">
+                                        <p title="{{ item.team_fullname }}">{{ item.team_fullname }}</p>
+                                    </div>
+                                </td>
+                                <td>{{ item.comprehensive_rate }}%</td>
+                                <td>{{ item.lead_create_rate }}%</td>
+                                <td>{{ item.note_add_rate }}%</td>
+                                <td>{{ item.deal_value_rate }}%</td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 转化分析 -->
+            <div class="common-block convert-box">
+                <h2>
+                    转化分析
+                    <span>{{ list.lead_conversion.date_from.date_range_label }}</span>
+                </h2>
+
+                <!-- 进度条转化率 -->
+                <section class="convert-rate-box">
+                    <!-- 进度条 -->
+                    <div class="progress-block">
+                        <div class="custom-potential-color">
+                            <p class="context-arrow">
+                                <label>潜在客户</label>
+                            </p>
+                            <!-- 当潜在客户为零时进度值为0，否则都是100% -->
+                            <progress [value]="list.lead_conversion.stats.potential_count === 0 ? 0 : 100" max="100">
+                                <span class="text-nowrap">{{ list.lead_conversion.stats.potential_count }} 人</span>
+                            </progress>
+                        </div>
+
+                        <div class="custom-interest-color">
+                            <p class="context-arrow">
+                                <label>兴趣客户</label>
+                                <span><i></i>兴趣转化率 {{ list.lead_conversion.stats.interested_value }}%</span>
+                            </p>
+                            <progress max="100"
+                                [value]="list.lead_conversion.stats.interested_count === 0 ? 0: list.lead_conversion.stats.interested_count/list.lead_conversion.stats.potential_count*100">
+                                <span class="text-nowrap">{{ list.lead_conversion.stats.interested_count }} 人</span>
+                            </progress>
+                        </div>
+
+                        <div class="custom-intention-color">
+                            <p class="context-arrow">
+                                <label>意向客户</label>
+                                <span><i></i> 意向转化率 {{ list.lead_conversion.stats.committed_value }}%</span>
+                            </p>
+                            <progress max="100"
+                                [value]="list.lead_conversion.stats.committed_count === 0 ? 0: list.lead_conversion.stats.committed_count/list.lead_conversion.stats.potential_count*100">
+                                <span class="text-nowrap">{{ list.lead_conversion.stats.committed_count }} 人</span>
+                            </progress>
+                        </div>
+
+                        <div class="custom-done-color">
+                            <p class="context-arrow">
+                                <label>成交客户</label>
+                                <span><i></i> 成交转化率 {{ list.lead_conversion.stats.closed_value }}%</span>
+                            </p>
+                            <progress max="100"
+                                [value]="list.lead_conversion.stats.closed_count === 0 ? 0: list.lead_conversion.stats.closed_count/list.lead_conversion.stats.potential_count*100">
+                                <span class="text-nowrap">{{ list.lead_conversion.stats.closed_count }} 人</span>
+                            </progress>
+                        </div>
+                    </div>
+
+                    <!-- 转化率箭头  -->
+                    <div class="arrow-line">
+                        <span>综合转化率{{ list.lead_conversion.stats.composite_value }}%</span>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- 流失统计 -->
+            <div class="common-block">
+                <h2>
+                    流失统计
+                    <span>{{ list.lead_loss_stats.date_from.date_range_label }}</span>
+                </h2>
+                <ul class="flex-row-between common-overview">
+                    <li class="loss-lead-total">
+                        <p>总流失客户</p>
+                        <span>
+                            {{ list.lead_loss_stats.stats.total_loss_count }}人
+                            <label>今日+{{ list.lead_loss_stats.today_stats.total_loss_count }}</label>
+                        </span>
+                    </li>
+                    <li>
+                        <p>约损失金额</p>
+                        <span>
+                            {{ list.lead_loss_stats.stats.total_loss_value |convertUnit }}w
+                            <label>今日损失{{ list.lead_loss_stats.today_stats.total_loss_value |convertUnit }}w</label>
+                        </span>
+                    </li>
+                </ul>
+
+                <!-- 流失情况柱状图 -->
+                <div class="chart-wrapper">
+                    <div class="chart-div" echarts [options]="lossChartOption" (chartInit)="lossChartInit($event)">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
 </main>

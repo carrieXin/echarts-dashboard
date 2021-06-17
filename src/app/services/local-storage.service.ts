@@ -40,7 +40,6 @@ export class LocalStorageService {
    */
   public setItem(key: string, value: any, expired?: number) {
     const source = this.source;
-    // source[key] = typeof value === 'object' ? JSON.stringify(value) : value;
     source[key] = JSON.stringify(value);
     if (expired) {
       source[`${key}_expires`] = Date.now() + 1000 * 60 * expired;
@@ -60,6 +59,7 @@ export class LocalStorageService {
       this.removeItem(key);
       return;
     }
+    // 不存在该对象时直接返回undefined
     const value = source[key] ? JSON.parse(source[key]) : source[key];
     return value;
   }

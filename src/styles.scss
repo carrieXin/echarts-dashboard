@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+body,
 h1,
 h2,
 h3,
@@ -8,5 +9,32 @@ h6 {
   margin: 0;
 }
 p {
+  font-size: inherit;
+  line-height: 21px;
+  margin: 0px;
   padding: 0;
+}
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+li {
+  list-style: none;
+  margin: 0;
+}
+h1, h2 {
+  margin: 0;
+}
+label {
+  margin: 0;
+}
+
+body,
+app-root {
+  width: 100%;
+  height: 100%;
+}
+router-outlet {
+  display: none;
 }

@@ -6,25 +6,12 @@ import { AuthGuard } from './core/guards/auth.guard';
 
 // components
 import { LayoutComponent } from './layout/layout.component';
+import { DashboardComponent } from './modules/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
-    path: 'panel',
-    // canActivate: [AuthGuard],
-    component: LayoutComponent,
-    children: [
-      // 默认展示的菜单页
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-      },
-      // 团队管理
-      {
-        path: 'dashboard',
-        loadChildren: './modules/dashboard/dashboard.module#DashboardModule'
-      },
-    ]
+    path: 'dashboard',
+    component: DashboardComponent
   },
   {
     path: 'login',
@@ -32,12 +19,12 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'panel',
+    redirectTo: 'dashboard',
     pathMatch: 'full'
   },
   {
     path: 'index',
-    redirectTo: 'panel',
+    redirectTo: 'dashboard',
     pathMatch: 'full'
   }
 ];
